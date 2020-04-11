@@ -4,11 +4,18 @@ Avaliação de Spring para MBA
 Spring Boot Rest API + Swagger
 Usando como banco temporario o H2, pela simplicidade e facilidade de uso.
 
+Obs.: Por falta, de experiencia com testes mockados e tdd, não consegui desenvolver os testes, porém é algo 
+que estou reforçando com estudos.
+
 # Docs
 
 http://localhost:8080/swagger-ui.html#/
 
 ## Usuario Controller:
+
+**GET - /usuario**
+
+Lista todos usuarios cadastrados
 
 **POST - /usuario**
 
@@ -37,6 +44,10 @@ Usado para atualizar dados pessoais do usuario
 **GET - /usuario/{id}**
 
 Busca informações do usuario pelo id informado
+
+**DELETE - /usuario/{id}**
+
+Desativa o usuario pelo id dele
 
 **POST - /usuario/upload**
 
