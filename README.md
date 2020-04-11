@@ -86,6 +86,74 @@ sobre cada parcela. . Alem é claro do id da conta do usuario
   "valorParcela": 0
 }
 
+# Carga
+
+O sistema realiza uma carga, cadastrando o seguinte usuario
+
+{
+  "mensagem": null,
+  "idConta": 1,
+  "usuario": {
+    "mensagem": null,
+    "nome": "Arthur",
+    "idUsuario": 1,
+    "nick": "teste",
+    "status": true
+  },
+  "historico": [
+    {
+      "idHistorico": 1,
+      "nomeCliente": "Loja X",
+      "dataTransacao": "2020-04-01T03:00:00.000+0000",
+      "valorParcela": 50,
+      "numeroParcelas": 1,
+      "juros": 0
+    },
+    {
+      "idHistorico": 2,
+      "nomeCliente": "Loja Y",
+      "dataTransacao": "2020-04-01T03:00:00.000+0000",
+      "valorParcela": 50,
+      "numeroParcelas": 2,
+      "juros": 0
+    }
+  ],
+  "tranferencias": [
+    {
+      "mensagem": null,
+      "idTransferencia": 1,
+      "dataInsercao": "2020-04-01",
+      "dataLimitePagamento": "2020-05-01T03:00:00.000+0000",
+      "tipo": "D",
+      "valor": 50,
+      "responsavel": "Loja X"
+    },
+    {
+      "mensagem": null,
+      "idTransferencia": 2,
+      "dataInsercao": "2020-04-01",
+      "dataLimitePagamento": "2020-05-01T03:00:00.000+0000",
+      "tipo": "D",
+      "valor": 50,
+      "responsavel": "Loja Y"
+    },
+    {
+      "mensagem": null,
+      "idTransferencia": 3,
+      "dataInsercao": "2020-04-01",
+      "dataLimitePagamento": "2020-06-01T03:00:00.000+0000",
+      "tipo": "D",
+      "valor": 50,
+      "responsavel": "Loja Y"
+    }
+  ],
+  "saldo": 4500,
+  "limite": 5000,
+  "consumido": 100,
+  "diaDoMesFatura": 1
+}
+
+
 # Autor
 
 ```
