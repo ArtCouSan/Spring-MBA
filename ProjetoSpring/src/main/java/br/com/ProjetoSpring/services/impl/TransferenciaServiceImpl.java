@@ -32,29 +32,13 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         this.repositoryHistorico = repositoryHistorico;
     }
 
-    @Override
-    public TransferenciaVO depositar(Long idConta, DepositarDTO depositarDTO) {
-        TransferenciaVO transferenciaVO = new TransferenciaVO();
-        transferenciaVO.setDataInsercao(LocalDate.now());
-        transferenciaVO.setTipo(TipoTransferenciaEnum.CREDITO.getTipo());
-        transferenciaVO.setResponsavel(depositarDTO.getResponsavel());
-
-        Optional<ContaVO> contaOptional = this.repositoryConta.findById(idConta);
-        transferenciaVO.setConta(contaOptional.get());
-
-        // Verifica se existe conta
-        if (contaOptional.isPresent()) {
-            transferenciaVO = calculoDepositar(transferenciaVO, depositarDTO.getCredito());
-            transferenciaVO.setValor(depositarDTO.getCredito());
-            transferenciaVO.setMensagem("Creditado com sucesso!");
-            return this.repositoryTransferencia.save(transferenciaVO);
-        } else {
-            transferenciaVO.setValor(BigDecimal.ZERO);
-            transferenciaVO.setMensagem("Erro conta não encontrada");
-            return this.repositoryTransferencia.save(transferenciaVO);
-        }
-    }
-
+    /**
+     * Verifica o tipo de pagamento
+     * @param idConta
+     * @param pagamento
+     * @param tipoPagamentoEnum
+     * @return transferencias realizadas
+     */
     @Override
     public List<TransferenciaVO> pagamento(Long idConta, Object pagamento, TipoPagamentoEnum tipoPagamentoEnum) {
 
@@ -69,6 +53,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
             switch (tipoPagamentoEnum) {
                 case VISTA:
                     lista.add(pagamentoAVista(contaOptional, (PagamentoAVistaDTO) pagamento));
+                    // Cria historico para extracao
                     historico.setJuros(0.0);
                     historico.setNomeCliente(((PagamentoAVistaDTO) pagamento).getResponsavel());
                     historico.setNumeroParcelas(1);
@@ -76,6 +61,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
                     break;
                 case PARCELADO:
                     lista = pagamentoParcelado(contaOptional, (PagamentoParceladoDTO) pagamento);
+                    // Cria historico para extracao
                     historico.setJuros(((PagamentoParceladoDTO) pagamento).getJuros());
                     historico.setNomeCliente(((PagamentoParceladoDTO) pagamento).getResponsavel());
                     historico.setNumeroParcelas(((PagamentoParceladoDTO) pagamento).getNumeroParcela());
@@ -83,6 +69,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
                     break;
             }
 
+            // Verifica todos os debitos do mes vigente de parcela
             Calendar dataInicioPagamento = Calendar.getInstance();
             dataInicioPagamento.set(Year.now().getValue(), LocalDate.now()
                     .getMonthValue() - 1, contaOptional.get().getDiaDoMesFatura(), 0, 0, 0);
@@ -100,6 +87,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
             historico.setDataTransacao(dataInicioPagamento);
             historico.setConta(contaOptional.get());
 
+            // Realiza atualizacao do saldo da conta
             BigDecimal saldo = contaOptional.get().getLimite().subtract(totalDebitosAteUltimaFatura);
             contaOptional.get().setSaldo(saldo);
 
@@ -115,6 +103,12 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         return lista;
     }
 
+    /**
+     * Realiza transferencia de pagamento a vista
+     * @param contaOptional
+     * @param pagamentoAVistaDTO
+     * @return
+     */
     @Override
     public TransferenciaVO pagamentoAVista(Optional<ContaVO> contaOptional, PagamentoAVistaDTO pagamentoAVistaDTO) {
         TransferenciaVO transferenciaVO = new TransferenciaVO();
@@ -126,6 +120,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         calculoPagamento(transferenciaVO, pagamentoAVistaDTO.getValor(), pagamentoAVistaDTO.getValor());
         Calendar dataLimitePagamento = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
+        // Verifica se o mes atual ja passou da data limite da fatura
         if (MonthDay.now().getDayOfMonth() >= contaOptional.get().getDiaDoMesFatura()) {
             dataLimitePagamento.set(Year.now().getValue(), LocalDate.now()
                     .getMonthValue(), contaOptional.get().getDiaDoMesFatura(), 0, 0, 0);
@@ -138,6 +133,12 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         return this.repositoryTransferencia.save(transferenciaVO);
     }
 
+    /**
+     * Realiza transferencia de pagamento parcelado
+     * @param contaOptional
+     * @param pagamentoParceladoDTO
+     * @return
+     */
     @Override
     public List<TransferenciaVO> pagamentoParcelado(Optional<ContaVO> contaOptional, PagamentoParceladoDTO pagamentoParceladoDTO) {
         List<TransferenciaVO> listaTransferenciasVO = new ArrayList<TransferenciaVO>();
@@ -153,7 +154,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 
         transacoesRealizadas = criaParcelas(contaOptional, pagamentoParceladoDTO, listaTransferenciasVO, transacoesRealizadas, numeroParcelas);
 
-        // Se alguma transacao falhar
+        // Se alguma transacao falhar, zera as transacoes, e as geram por motivos de historico
         if (!transacoesRealizadas) {
             listaTransferenciasVO.stream().forEach(transacoes -> {
                 transacoes.setMensagem("Valor de saldo inferior ao solicitado!");
@@ -164,13 +165,25 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         return this.repositoryTransferencia.saveAll(listaTransferenciasVO);
     }
 
+    /**
+     * Cria loop nas parcelas, verificando o valor de cada parcela de acordo com os debitos no seu mes
+     * , somando com o juros aplicado
+     * @param contaOptional
+     * @param pagamentoParceladoDTO
+     * @param listaTransferenciasVO
+     * @param transacoesRealizadas
+     * @param numeroParcelas
+     * @return
+     */
     private Boolean criaParcelas(Optional<ContaVO> contaOptional, PagamentoParceladoDTO pagamentoParceladoDTO, List<TransferenciaVO> listaTransferenciasVO, Boolean transacoesRealizadas, Integer numeroParcelas) {
         List<BigDecimal> parcelas = new ArrayList<>();
 
+        // Cria array das parcelas
         for (int i = 0; i < pagamentoParceladoDTO.getNumeroParcela(); i++) {
             parcelas.add(pagamentoParceladoDTO.getValorParcela());
         }
 
+        // Cria transacao para cada parcela
         for (BigDecimal valorParcela : parcelas) {
             TransferenciaVO transferenciaVO = new TransferenciaVO();
             transferenciaVO.setDataInsercao(LocalDate.now());
@@ -178,6 +191,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
             transferenciaVO.setResponsavel(pagamentoParceladoDTO.getResponsavel());
             transferenciaVO.setConta(contaOptional.get());
 
+            // Verifica debitos no mes da parcela
             Calendar dataInicioParcela = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
             dataInicioParcela.set(Year.now().getValue(), LocalDate.now()
@@ -223,6 +237,13 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         return transacoesRealizadas;
     }
 
+    /**
+     * Verifica se o saldo disponivel eh suficiente
+     * @param transferenciaVO
+     * @param debito
+     * @param parcela
+     * @return
+     */
     private Boolean calculoPagamento(TransferenciaVO transferenciaVO, BigDecimal debito, BigDecimal parcela) {
         BigDecimal saldo = transferenciaVO.getConta().getSaldo().subtract(debito);
         if (saldo.compareTo(new BigDecimal(0)) < 0) {
@@ -235,12 +256,6 @@ public class TransferenciaServiceImpl implements TransferenciaService {
             transferenciaVO.setMensagem("Debitado com sucesso!");
             return true;
         }
-    }
-
-    private TransferenciaVO calculoDepositar(TransferenciaVO transferenciaVO, BigDecimal valor) {
-        BigDecimal saldoCredito = transferenciaVO.getConta().getSaldo().add(valor);
-        transferenciaVO.getConta().setSaldo(saldoCredito);
-        return transferenciaVO;
     }
 
 }

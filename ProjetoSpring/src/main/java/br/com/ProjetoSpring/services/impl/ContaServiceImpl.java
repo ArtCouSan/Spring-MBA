@@ -24,16 +24,30 @@ public class ContaServiceImpl implements ContaService{
         this.historicoRepository = historicoRepository;
     }
 
+    /**
+     * Lista todas as contas
+     * @return contas
+     */
     @Override
     public Stream<ContaVO> listarContas() {
         return this.contaRepository.findAll().stream();
     }
 
+    /**
+     * Pega com pelo id
+     * @param id
+     * @return
+     */
     @Override
     public Optional<ContaVO> pegarContaPeloId(Long id) {
         return this.contaRepository.findByIdContaOrderByIdConta(id);
     }
 
+    /**
+     * Lista historico de transacoes
+     * @param id
+     * @return
+     */
     @Override
     public List<HistoricoVO> exportarHistorico(Long id) {
         return historicoRepository.historico(id);

@@ -25,6 +25,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         this.pe = pe;
     }
 
+    /**
+     * Salva usuario
+     * @param usuarioSalvarDTO
+     * @return
+     */
     @Override
     public UsuarioVO salvarUsuario(UsuarioSalvarDTO usuarioSalvarDTO) {
         UsuarioVO usuario = usuarioSalvarDTO.parseUsuarioVO();
@@ -42,6 +47,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
+    /**
+     * Altera usuario
+     * @param usuarioAlterarDTO
+     * @return
+     */
     @Override
     public UsuarioVO alterarUsuario(UsuarioAlterarDTO usuarioAlterarDTO) {
 
@@ -64,11 +74,20 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
+    /**
+     * Lista todos usuarios
+     * @return
+     */
     @Override
     public List<UsuarioVO> listarUsuarios() {
         return this.repositoryUsuario.findAll();
     }
 
+    /**
+     * Desativa o usuario
+     * @param id
+     * @return
+     */
     @Override
     public Optional<UsuarioVO> desativarUsuario(Long id) {
         Optional<UsuarioVO> usuarioVO = this.repositoryUsuario.findById(id);
@@ -80,6 +99,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioVO;
     }
 
+    /**
+     * Pega usuario pelo seu id
+     * @param id
+     * @return
+     */
     @Override
     public Optional<UsuarioVO> pegarUsuarioPeloId(Long id) {
         return this.repositoryUsuario.findById(id);

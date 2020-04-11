@@ -40,9 +40,7 @@ public class Swagger {
                 .paths(PathSelectors.any())
                 .build()
                 .enable(true)
-                .apiInfo(apiInfo())
-                .securityContexts(Lists.newArrayList(securityContext()))
-                .securitySchemes(Lists.newArrayList(apiKey()));
+                .apiInfo(apiInfo());
     }
 
     private ApiKey apiKey() {
