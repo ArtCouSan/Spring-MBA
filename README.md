@@ -13,7 +13,7 @@ http://localhost:8080/swagger-ui.html#/
 
 Usuario Controller:
 
-POST - /usuario
+**POST - /usuario**
 
 Cadastra conta do usuario, onde será informado o dia de pagamento da fatura e o limite de credito
 
@@ -27,7 +27,7 @@ Cadastra conta do usuario, onde será informado o dia de pagamento da fatura e o
   "password": "1234"
 }
 
-PUT - /usuario
+**PUT - /usuario**
 
 Usado para atualizar dados pessoais do usuario
 
@@ -37,9 +37,20 @@ Usado para atualizar dados pessoais do usuario
   "password": "4567"
 }
 
-GET - /usuario/{id}
+**GET - /usuario/{id}**
 
-Busca informações do usuario
+Busca informações do usuario pelo id informado
+
+**POST - /usuario/upload**
+
+Selecione o txt com os alunos e aguarde cadastro dos mesmos, onde será enviado:
+
+>Nome: AARON FELIPE GRASSMANN 
+
+>Nick: 3095564
+
+>Password: 100-11
+
 
 Conta Controller:
 
