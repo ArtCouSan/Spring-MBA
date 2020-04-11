@@ -27,9 +27,6 @@ public class ExtratoDTO {
     @CsvBindByName(column = "Juros")
     private Double juros;
 
-    @CsvBindByName(column = "Data limite de pagamento")
-    private Double dataLimitePagamento;
-
     public String getNome() {
         return nome;
     }
@@ -68,14 +65,6 @@ public class ExtratoDTO {
 
     public void setJuros(Double juros) {
         this.juros = juros;
-    }
-
-    public Double getDataLimitePagamento() {
-        return dataLimitePagamento;
-    }
-
-    public void setDataLimitePagamento(Double dataLimitePagamento) {
-        this.dataLimitePagamento = dataLimitePagamento;
     }
 
     public ExtratoDTO() {
