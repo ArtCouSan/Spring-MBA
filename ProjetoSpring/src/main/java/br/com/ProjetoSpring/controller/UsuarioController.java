@@ -1,16 +1,10 @@
 package br.com.ProjetoSpring.controller;
 
-import br.com.ProjetoSpring.dto.LoginDTO;
 import br.com.ProjetoSpring.dto.UsuarioAlterarDTO;
 import br.com.ProjetoSpring.dto.UsuarioSalvarDTO;
-import br.com.ProjetoSpring.dto.UsuarioStatusDTO;
 import br.com.ProjetoSpring.models.UsuarioVO;
 import br.com.ProjetoSpring.services.UsuarioService;
 import br.com.ProjetoSpring.utils.FileUtils;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,17 +37,22 @@ public class UsuarioController {
         return this.serviceUsuario.alterarUsuario(usuarioAlterarDTO);
     }
 
+    @GetMapping()
+    public List<UsuarioVO> listarUsuarios() {
+        return this.serviceUsuario.listarUsuarios();
+    }
+
     @GetMapping("/{id}")
     public UsuarioVO pegarUsuarioPeloId(@PathVariable Long id) {
         return this.serviceUsuario.pegarUsuarioPeloId(id).get();
     }
 
-    @PostMapping("/alterar-status")
-    public UsuarioVO alterarStatus(@RequestBody UsuarioStatusDTO usuarioStatus) {
-        return this.serviceUsuario.alterarStatusUsuario(usuarioStatus).get();
+    @DeleteMapping("/{id}")
+    public UsuarioVO desativarUsuario(@PathVariable Long id) {
+        return this.serviceUsuario.desativarUsuario(id).get();
     }
 
-    @PostMapping("/uploadUsers")
+    @PostMapping("/upload")
     public List<UsuarioVO> uploadUsers(@RequestParam("file") MultipartFile multipart) throws IOException {
         File file = FileUtils.convert(multipart);
         BCryptPasswordEncoder ps = new BCryptPasswordEncoder();

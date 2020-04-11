@@ -33,10 +33,18 @@ public class ContaSalvarDTO {
      */
     public ContaVO parseContaVO(){
         ContaVO contaVO = new ContaVO();
-        contaVO.setDiaDoMesFatura(this.diaDoMesFatura);
         contaVO.setConsumido(BigDecimal.ZERO);
-        contaVO.setLimite(this.limite);
-        contaVO.setSaldo(this.limite);
+
+        if(this.diaDoMesFatura != null){
+            contaVO.setDiaDoMesFatura(this.diaDoMesFatura);
+            contaVO.setLimite(this.limite);
+            contaVO.setSaldo(this.limite);
+        }else {
+            contaVO.setDiaDoMesFatura(1);
+            contaVO.setLimite(new BigDecimal(4000));
+            contaVO.setSaldo(new BigDecimal(4000));
+        }
+
         return contaVO;
     }
 

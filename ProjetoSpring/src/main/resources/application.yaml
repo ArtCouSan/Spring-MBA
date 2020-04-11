@@ -1,5 +1,6 @@
 spring.datasource:
-   url: jdbc:h2:~/conta;DB_CLOSE_ON_EXIT=FALSE
+   url: jdbc:h2:mem:conta
+   data: classpath:db/carga.sql
 spring.jpa:
    show-sql: true
    hibernate.ddl-auto: update

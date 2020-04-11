@@ -61,7 +61,12 @@ public class UsuarioSalvarDTO {
         usuarioVO.setNome(this.nome);
         usuarioVO.setPassword(this.password);
         usuarioVO.setStatus(UsuarioStatusEnum.ATIVO.getStatus());
-        usuarioVO.setConta(conta.parseContaVO());
+        if(conta == null){
+            ContaSalvarDTO conta = new ContaSalvarDTO();
+            usuarioVO.setConta(conta.parseContaVO());
+        }else{
+            usuarioVO.setConta(conta.parseContaVO());
+        }
         return usuarioVO;
     }
 

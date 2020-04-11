@@ -3,6 +3,8 @@ package br.com.ProjetoSpring.models;
 import br.com.ProjetoSpring.http_utils.GenericResponse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -28,7 +30,7 @@ public class UsuarioVO extends GenericResponse {
     private Boolean status;
 
     @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "ID_CONTA", referencedColumnName = "ID_CONTA")
     private ContaVO conta;
 
