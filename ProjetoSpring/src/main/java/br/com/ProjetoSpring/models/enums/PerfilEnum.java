@@ -1,11 +1,11 @@
 package br.com.ProjetoSpring.models.enums;
 
-public enum Perfil {
+public enum PerfilEnum {
     ADMIN("ROLE_ADMIN");
 
     private String perfil;
 
-    Perfil(String perfil) {
+    PerfilEnum(String perfil) {
         this.perfil = perfil;
     }
 
@@ -13,8 +13,8 @@ public enum Perfil {
         return perfil;
     }
 
-    public static Perfil getName(String value) {
-        for (Perfil perfil : Perfil.values()) {
+    public static PerfilEnum getName(String value) {
+        for (PerfilEnum perfil : PerfilEnum.values()) {
             if (perfil.getPerfil().equals(value)) {
                 return perfil;
             }

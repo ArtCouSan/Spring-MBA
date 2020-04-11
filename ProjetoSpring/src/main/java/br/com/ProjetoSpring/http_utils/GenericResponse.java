@@ -1,6 +1,6 @@
 package br.com.ProjetoSpring.http_utils;
 
-import org.springframework.data.annotation.Transient;
+import javax.persistence.Transient;
 
 public class GenericResponse {
 

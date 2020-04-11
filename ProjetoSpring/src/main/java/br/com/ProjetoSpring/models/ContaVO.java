@@ -1,6 +1,7 @@
 package br.com.ProjetoSpring.models;
 
 import br.com.ProjetoSpring.http_utils.GenericResponse;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.math.BigDecimal;
@@ -23,6 +24,12 @@ public class ContaVO extends GenericResponse {
             fetch = FetchType.LAZY, optional = false)
     private UsuarioVO usuario;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conta")
+    private List<HistoricoVO> historico;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conta")
+    private List<TransferenciaVO> tranferencias;
+
     @Column(name = "SALDO")
     private BigDecimal saldo;
 
@@ -34,9 +41,6 @@ public class ContaVO extends GenericResponse {
 
     @Column(name = "DIA_PAGAMENTO_FATURA")
     private Integer diaDoMesFatura;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conta")
-    private List<TransferenciaVO> tranferencias;
 
     public BigDecimal getSaldo() {
         return saldo;
@@ -95,5 +99,13 @@ public class ContaVO extends GenericResponse {
 
     public void setDiaDoMesFatura(Integer diaDoMesFatura) {
         this.diaDoMesFatura = diaDoMesFatura;
+    }
+
+    public List<HistoricoVO> getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(List<HistoricoVO> historico) {
+        this.historico = historico;
     }
 }

@@ -1,13 +1,13 @@
 package br.com.ProjetoSpring.models.enums;
 
-public enum Tipo_TransferenciaEnum {
+public enum TipoTransferenciaEnum {
 
     CREDITO("C"),
     DEBITO("D");
 
     private String tipo;
 
-    Tipo_TransferenciaEnum(String tipo) {
+    TipoTransferenciaEnum(String tipo) {
         this.tipo = tipo;
     }
 
@@ -15,8 +15,8 @@ public enum Tipo_TransferenciaEnum {
         return tipo;
     }
 
-    public static Tipo_TransferenciaEnum getName(String value) {
-        for (Tipo_TransferenciaEnum tipo : Tipo_TransferenciaEnum.values()) {
+    public static TipoTransferenciaEnum getName(String value) {
+        for (TipoTransferenciaEnum tipo : TipoTransferenciaEnum.values()) {
             if (tipo.getTipo().equals(value)) {
                 return tipo;
             }

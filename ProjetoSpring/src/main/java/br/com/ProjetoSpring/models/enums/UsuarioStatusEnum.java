@@ -1,13 +1,13 @@
 package br.com.ProjetoSpring.models.enums;
 
-public enum UsuarioStatus {
+public enum UsuarioStatusEnum {
 
     ATIVO(true),
     INATIVO(false);
 
     private Boolean status;
 
-    UsuarioStatus(Boolean status) {
+    UsuarioStatusEnum(Boolean status) {
         this.status = status;
     }
 

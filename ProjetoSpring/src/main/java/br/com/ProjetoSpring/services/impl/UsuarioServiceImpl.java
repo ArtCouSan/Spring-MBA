@@ -4,8 +4,9 @@ import br.com.ProjetoSpring.dto.UsuarioAlterarDTO;
 import br.com.ProjetoSpring.dto.UsuarioSalvarDTO;
 import br.com.ProjetoSpring.dto.UsuarioStatusDTO;
 import br.com.ProjetoSpring.models.UsuarioVO;
-import br.com.ProjetoSpring.models.enums.Perfil;
+import br.com.ProjetoSpring.models.enums.PerfilEnum;
 import br.com.ProjetoSpring.repository.UsuarioRepository;
+import br.com.ProjetoSpring.services.TransferenciaService;
 import br.com.ProjetoSpring.services.UsuarioService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository repositoryUsuario;
     private BCryptPasswordEncoder pe;
 
-    public UsuarioServiceImpl(UsuarioRepository repositoryUsuario, BCryptPasswordEncoder pe) {
+    public UsuarioServiceImpl(UsuarioRepository repositoryUsuario, TransferenciaService serviceTransferencia, BCryptPasswordEncoder pe) {
         this.repositoryUsuario = repositoryUsuario;
         this.pe = pe;
     }
@@ -26,7 +27,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioVO salvarUsuario(UsuarioSalvarDTO usuarioSalvarDTO) {
         UsuarioVO usuario = usuarioSalvarDTO.parseUsuarioVO();
-        usuario.setPerfil(Perfil.ADMIN.getPerfil());
+        usuario.setPerfil(PerfilEnum.ADMIN.getPerfil());
         usuario.setPassword(pe.encode(usuario.getPassword()));
         return this.repositoryUsuario.save(usuario);
     }
@@ -34,7 +35,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioVO alterarUsuario(UsuarioAlterarDTO usuarioAlterarDTO) {
         UsuarioVO usuario = usuarioAlterarDTO.parseUsuarioVO();
-        usuario.setPerfil(Perfil.ADMIN.getPerfil());
+        usuario.setPerfil(PerfilEnum.ADMIN.getPerfil());
         usuario.setPassword(pe.encode(usuario.getPassword()));
         return this.repositoryUsuario.save(usuario);
     }

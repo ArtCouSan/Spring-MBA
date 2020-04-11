@@ -1,7 +1,7 @@
 package br.com.ProjetoSpring.dto;
 
 import br.com.ProjetoSpring.models.UsuarioVO;
-import br.com.ProjetoSpring.models.enums.UsuarioStatus;
+import br.com.ProjetoSpring.models.enums.UsuarioStatusEnum;
 
 public class UsuarioSalvarDTO {
 
@@ -37,6 +37,14 @@ public class UsuarioSalvarDTO {
         this.password = password;
     }
 
+    public ContaSalvarDTO getConta() {
+        return conta;
+    }
+
+    public void setConta(ContaSalvarDTO conta) {
+        this.conta = conta;
+    }
+
     public UsuarioSalvarDTO(String nome, String nick, String password, ContaSalvarDTO conta) {
         this.nome = nome;
         this.nick = nick;
@@ -52,8 +60,7 @@ public class UsuarioSalvarDTO {
         usuarioVO.setNick(this.nick);
         usuarioVO.setNome(this.nome);
         usuarioVO.setPassword(this.password);
-        usuarioVO.setStatus(UsuarioStatus.ATIVO.getStatus());
-        ContaSalvarDTO conta = new ContaSalvarDTO();
+        usuarioVO.setStatus(UsuarioStatusEnum.ATIVO.getStatus());
         usuarioVO.setConta(conta.parseContaVO());
         return usuarioVO;
     }

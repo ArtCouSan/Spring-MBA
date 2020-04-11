@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 @Table(name = "TB_TRANSFERENCIA")
@@ -22,7 +24,8 @@ public class TransferenciaVO extends GenericResponse {
     private LocalDate dataInsercao;
 
     @Column(name = "DATA_LIMITE_PAGAMENTO")
-    private LocalDate dataLimitePagamento;
+    @Temporal(TemporalType.DATE)
+    private Calendar dataLimitePagamento;
 
     @Column(name = "TIPO_TRANFERENCIA")
     private String tipo;
@@ -70,11 +73,11 @@ public class TransferenciaVO extends GenericResponse {
         this.conta = conta;
     }
 
-    public LocalDate getDataLimitePagamento() {
+    public Calendar  getDataLimitePagamento() {
         return dataLimitePagamento;
     }
 
-    public void setDataLimitePagamento(LocalDate dataLimitePagamento) {
+    public void setDataLimitePagamento(Calendar  dataLimitePagamento) {
         this.dataLimitePagamento = dataLimitePagamento;
     }
 

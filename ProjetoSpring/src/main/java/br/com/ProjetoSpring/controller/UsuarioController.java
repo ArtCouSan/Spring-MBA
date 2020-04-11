@@ -1,11 +1,16 @@
 package br.com.ProjetoSpring.controller;
 
+import br.com.ProjetoSpring.dto.LoginDTO;
 import br.com.ProjetoSpring.dto.UsuarioAlterarDTO;
 import br.com.ProjetoSpring.dto.UsuarioSalvarDTO;
 import br.com.ProjetoSpring.dto.UsuarioStatusDTO;
 import br.com.ProjetoSpring.models.UsuarioVO;
 import br.com.ProjetoSpring.services.UsuarioService;
 import br.com.ProjetoSpring.utils.FileUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,12 +33,12 @@ public class UsuarioController {
         this.serviceUsuario = serviceUsuario;
     }
 
-    @PostMapping("/cadastrar")
+    @PostMapping()
     public UsuarioVO cadastrar(@RequestBody UsuarioSalvarDTO usuarioSalvarDTO) {
         return this.serviceUsuario.salvarUsuario(usuarioSalvarDTO);
     }
 
-    @PutMapping("/atualizar")
+    @PutMapping()
     public UsuarioVO atualizar(@RequestBody UsuarioAlterarDTO usuarioAlterarDTO) {
         return this.serviceUsuario.alterarUsuario(usuarioAlterarDTO);
     }

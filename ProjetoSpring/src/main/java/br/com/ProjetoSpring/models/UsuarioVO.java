@@ -32,6 +32,7 @@ public class UsuarioVO extends GenericResponse {
     @JoinColumn(name = "ID_CONTA", referencedColumnName = "ID_CONTA")
     private ContaVO conta;
 
+    @JsonIgnore
     @Column(name ="PERFIL")
     private String perfil;
 

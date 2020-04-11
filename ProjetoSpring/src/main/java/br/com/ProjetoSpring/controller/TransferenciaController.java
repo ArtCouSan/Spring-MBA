@@ -4,6 +4,7 @@ import br.com.ProjetoSpring.dto.DepositarDTO;
 import br.com.ProjetoSpring.dto.PagamentoAVistaDTO;
 import br.com.ProjetoSpring.dto.PagamentoParceladoDTO;
 import br.com.ProjetoSpring.models.TransferenciaVO;
+import br.com.ProjetoSpring.models.enums.TipoPagamentoEnum;
 import br.com.ProjetoSpring.services.TransferenciaService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +20,14 @@ public class TransferenciaController {
         this.serviceTransferencia = serviceTransferencia;
     }
 
-    @PostMapping(value = "/depositar-conta")
-    public TransferenciaVO depositar(@PathVariable Long id, @RequestBody DepositarDTO depositarDTO){
-        return this.serviceTransferencia.depositar(id, depositarDTO);
-    }
-
     @PostMapping(value = "/pagar-a-vista")
     public TransferenciaVO pagarAVista(@PathVariable Long id, @RequestBody PagamentoAVistaDTO debitoDTO){
-        return this.serviceTransferencia.pagamentoAVista(id, debitoDTO);
+        return this.serviceTransferencia.pagamento(id, debitoDTO, TipoPagamentoEnum.VISTA).get(0);
     }
 
     @PostMapping(value = "/pagar-parcelado")
     public List<TransferenciaVO> pagarParcelado(@PathVariable Long id, @RequestBody PagamentoParceladoDTO pagamentoParceladoDTO){
-        return this.serviceTransferencia.pagamentoParcelado(id, pagamentoParceladoDTO);
+        return this.serviceTransferencia.pagamento(id, pagamentoParceladoDTO, TipoPagamentoEnum.PARCELADO);
     }
 
 }
