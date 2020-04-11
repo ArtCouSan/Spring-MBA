@@ -90,7 +90,7 @@ sobre cada parcela. . Alem é claro do id da conta do usuario
 
 O sistema realiza uma carga, cadastrando o seguinte usuario
 
-{
+
   "mensagem": null,
   "idConta": 1,
   "usuario": {
@@ -151,7 +151,7 @@ O sistema realiza uma carga, cadastrando o seguinte usuario
   "limite": 5000,
   "consumido": 100,
   "diaDoMesFatura": 1
-}
+
 
 
 # Autor
