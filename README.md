@@ -2,10 +2,14 @@
 Avaliação de Spring para MBA
 
 Spring Boot Rest API + Swagger
-Usando como banco temporario o H2, pela simplicidade e facilidade de uso.
+Usando como banco em memoria o H2, pela simplicidade e facilidade de uso.
+
+A logica do sistema de baseia em transações.
 
 Obs.: Por falta, de experiencia com testes mockados e tdd, não consegui desenvolver os testes, porém é algo 
 que estou reforçando com estudos.
+
+Obs.: Implementei JWT no projeto, porem não consegui habilitar o envio de token pelo swagger, sendo assim habilitei as urls para todos perfis, porem se habilitar autenticação no configure do Security e testar pelo Postman, terá validação JWT.
 
 # Docs
 
